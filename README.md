@@ -7,7 +7,7 @@ Some very crappy devices need this.
 
 ## Usage
 
-In the startup script, after loading the `asynInterposeDepay` driver and
+In the startup script, after loading the `asynInterposeDelay` driver and
 setting up an asyn octet port,
 call `asynInterposeDelay` to add this interpose layer to an existing
 asyn octet port/address.
@@ -18,17 +18,22 @@ interface with the `delay` option which is added by this interpose layer.
 The delay is a floating point number in seconds.
 
 ```
-require asynInterposeDelay
-
 asynInterposeDelay port, address, delay(sec)
 asynShowOption port, address, "delay"
 asynSetOption port, address, "delay", delay(sec)
 ```
 
-## Example
+## Example startup script
+
 ```
-drvAsynIPPortConfigure "device", "server.com:40000"
+require asynInterposeDelay
+drvAsynSerialPortConfigure "device", "/dev/ttyS0"
 asynInterposeDelay "device", 0, 0.001
+```
+
+## Example interactive delay display and change
+
+```
 asynShowOption "device", 0, "delay"
 asynSetOption "device", 0, "delay", 0.05
 ```
