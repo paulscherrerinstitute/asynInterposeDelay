@@ -13,7 +13,6 @@
 #include <epicsThread.h>
 #include <iocsh.h>
 
-#include <epicsExport.h>
 #include "asynDriver.h"
 #include "asynOctet.h"
 #include "asynOption.h"
@@ -27,8 +26,8 @@ typedef struct interposePvt {
     asynOption    *pasynOptionDrv;
     void          *optionPvt;
     double        delay;
-}interposePvt;
-
+} interposePvt;
+
 /* asynOctet methods */
 static asynStatus writeIt(void *ppvt, asynUser *pasynUser,
     const char *data, size_t numchars, size_t *nbytesTransfered)
@@ -37,7 +36,7 @@ static asynStatus writeIt(void *ppvt, asynUser *pasynUser,
     size_t n;
     size_t transfered = 0;
     asynStatus status = asynSuccess;
-    
+
     while (transfered < numchars) {
         /* write one char at a time */
         status = pvt->pasynOctetDrv->write(pvt->octetPvt,
@@ -128,7 +127,7 @@ static asynOctet octet = {
     registerInterruptUser, cancelInterruptUser,
     setInputEos, getInputEos, setOutputEos, getOutputEos
 };
-
+
 /* asynOption methods */
 
 static asynStatus
@@ -170,9 +169,8 @@ setOption(void *ppvt, asynUser *pasynUser, const char *key, const char *val)
 static asynOption option = {
     setOption, getOption
 };
-
 
-epicsShareFunc int 
+epicsShareFunc int
 asynInterposeDelay(const char *portName, int addr, double delay)
 {
     interposePvt *pvt;
@@ -187,7 +185,7 @@ asynInterposeDelay(const char *portName, int addr, double delay)
     status = pasynManager->interposeInterface(portName, addr,
         &pvt->octet, &poctetasynInterface);
     if ((status!=asynSuccess) || !poctetasynInterface) {
-	printf("%s interposeInterface asynOctetType failed.\n", portName);
+        printf("%s interposeInterface asynOctetType failed.\n", portName);
         free(pvt);
         return -1;
     }
